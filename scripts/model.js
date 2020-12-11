@@ -32,14 +32,25 @@ function modelCreateMovie(
     return movie;
 };
 
+function modelDeleteMovie(id) {
+    var realId = id.substring(6);
+
+    for (var i = 0; i < movieList.length; i++) {
+        if (movieList[i].id == realId) {
+            movieList.splice(i, 1);
+            break;
+        }
+    }
+}
+
 function modelGetAllMovies() {
     return movieList;
 };
 
 function modelGetMovie(id) {
-    for (x in movieList) {
-        if (x.id === id) {
-            return x;
+    for (movie in movieList) {
+        if (movieList[movie].id === id) {
+            return movie;
         }
     }
 
