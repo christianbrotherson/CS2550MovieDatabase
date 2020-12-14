@@ -10,11 +10,61 @@ function onPageLoad() {
     }
 
     clearInputForm();
-}
+};
+
+function onCreateClicked() {
+    var form = document.forms["add_movie_form"];
+
+    if (!validateFields()) return;
+
+    var title = form.title.value;
+    var rating = form.rating.value;
+    var year = form.year.value;
+    var my_rating = form.my_rating.value;
+    var genre = form.genre.value;
+    var bluray = form.bluray.checked;
+
+    addGridItem(modelCreateMovie(title, rating, year, my_rating, genre, bluray));
+    clearInputForm();
+};
+
+function onEditClicked() {
+    onAddMovieClicked();
+    document.getElementById("create").style.display = "none";
+    document.getElementById("update").style.display = "inline";
+
+    var movie = modelGetItemById(this.id.substring(4));
+    
+    var form = document.getElementById('movie_input_form');
+    form.title.value = movie.title;
+    form.year.value = movie.year;
+    form.rating.value = movie.rating;
+    form.my_rating.value = movie.personalRating;
+    form.bluray.checked = movie.isBluRay;
+    form.genre.value = movie.genre;
+
+    document.getElementById('update').onclick = function() {
+        onUpdateClick(movie.id);
+    }
+};
+
+function onUpdateClick(id) {
+    var form = document.getElementById('movie_input_form');
+    if (!validateFields()) return;
+    modelUpdateMovie(id, form.title.value, form.year.value, form.rating.value, form.my_rating.value, form.bluray.checked, form.genre.value);
+    buildMovieGrid();
+    clearInputForm();
+};
 
 function onDeleteClicked() {
-    modelDeleteMovie(this.id);
+    var movie = modelGetItemById(this.id.substring(6));
+    if (confirm(`Are you sure you would like to delete ${movie.title}?`)) {
+        modelDeleteMovie(movie.id);
+        buildMovieGrid();    
+    }
+};
 
+function buildMovieGrid() {
     var grid = document.getElementById("movie_items");
     var header;
     for (var i = 0; i < grid.childNodes.length; i++) {
@@ -31,7 +81,7 @@ function onDeleteClicked() {
     for (var i = 0; i < movies.length; i++) {
         addGridItem(movies[i]);
     }
-}
+};
 
 function addGridItem(movie) {
     var movieItems = document.getElementById("movie_items");
@@ -52,6 +102,9 @@ function addGridItem(movie) {
 
     var deleteID = document.getElementById('delete' + movie.id);
     deleteID.onclick = onDeleteClicked;
+    
+    var editID = document.getElementById('edit' + movie.id);
+    editID.onclick = onEditClicked;
 }
 
 function validateFields() {
@@ -121,7 +174,7 @@ function validateFields() {
         my_rating_error.innerText = '';
     }
 
-    if (form.elements['genre'].value == '') {
+    if (form.genre.value == '') {
         genre_error.innerText = 'Please select a movie genre';
         genre_error.style.display = 'block';
         document.getElementById("genre").style.borderBottom = "2px solid #D00000";
@@ -137,22 +190,6 @@ function validateFields() {
     }
 
     return true;
-}
-
-function onCreateClicked() {
-    var form = document.forms["add_movie_form"];
-
-    if (!validateFields()) return;
-
-    var title = form.title.value;
-    var rating = form.rating.value;
-    var year = form.year.value;
-    var my_rating = form.my_rating.value;
-    var genre = form.elements["genre"].value;
-    var bluray = form.bluray.checked;
-
-    addGridItem(modelCreateMovie(title, rating, year, my_rating, genre, bluray));
-    clearInputForm();
 }
 
 function clearInputForm() {
@@ -191,10 +228,13 @@ function clearInputForm() {
     document.getElementById("my_rating_error").innerText = '';
 
     form.bluray.checked = false;
+
+    document.getElementById('create').style.display = 'inline';
 }
 
 function onAddMovieClicked() {
     document.getElementById("movie_input_form").style.display = "block";
     document.getElementById("display_movies"). style.display = "none";
     document.getElementById("area_title").innerText = "Enter Movie Information";
+    document.getElementById("update").style.display = "none";
 }

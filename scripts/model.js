@@ -32,25 +32,39 @@ function modelCreateMovie(
     return movie;
 };
 
-function modelDeleteMovie(id) {
-    var realId = id.substring(6);
+function modelUpdateMovie(id, title, year, rating, personalRating, isBluRay, genre) {
+    var movie = modelGetItemById(id);
+    if (!movie) {
+        return undefined;
+    }
 
+    movie.title = title;
+    movie.year = year;
+    movie.rating = rating;
+    movie.personalRating = personalRating;
+    movie.isBluRay = isBluRay;
+    movie.genre = genre;
+
+    return movie;
+};
+
+function modelDeleteMovie(id) {
     for (var i = 0; i < movieList.length; i++) {
-        if (movieList[i].id == realId) {
+        if (movieList[i].id == id) {
             movieList.splice(i, 1);
             break;
         }
     }
-}
+};
 
 function modelGetAllMovies() {
     return movieList;
 };
 
-function modelGetMovie(id) {
+function modelGetItemById(id) {
     for (movie in movieList) {
-        if (movieList[movie].id === id) {
-            return movie;
+        if (movieList[movie].id == id) {
+            return movieList[movie];
         }
     }
 
