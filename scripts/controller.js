@@ -163,19 +163,34 @@ function clearInputForm() {
     var form = document.forms["add_movie_form"];
 
     form.title.value = "";
+    form.title.style.borderBottom = 'none';
+    document.getElementById("title_error").style.display = 'none';
+    document.getElementById("title_error").innerText = '';
+
     form.year.value = "";
+    form.year.style.borderBottom = 'none';
+    document.getElementById("year_error").style.display = 'none';
+    document.getElementById("year_error").innerText = '';
 
     form.action_adventure.checked = false;
     form.drama.checked = false;
     form.comedy.checked = false;
     form.romance.checked = false;
     form.scifi_fantasy.checked = false;
-
+    document.getElementById('genre').style.borderBottom = 'none';
+    document.getElementById('genre_error').innerText = '';
+    
     form.rating.selectedIndex = -1;
+    form.rating.style.borderBottom = 'none';
+    document.getElementById("rating_error").style.display = 'none';
+    document.getElementById("rating_error").innerText = '';
+
     form.my_rating.selectedIndex = -1;
+    form.my_rating.style.borderBottom = 'none';
+    document.getElementById("my_rating_error").style.display = 'none';
+    document.getElementById("my_rating_error").innerText = '';
 
     form.bluray.checked = false;
-
 }
 
 function onAddMovieClicked() {

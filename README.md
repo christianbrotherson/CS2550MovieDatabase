@@ -1,1 +1,1 @@
-"# CS2550MovieDatabase" 
+# CS2550MovieDatabase
